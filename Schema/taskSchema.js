@@ -5,10 +5,12 @@ const taskSchema = new mongooose.Schema({
   title: {
     type: String,
     required: [true, 'A task must have a title'],
+    trim: true,
   },
   descrition: {
     type: String,
     required: [true, 'A task must have a description'],
+    trim: true,
   },
   dueDate: {
     type: Date,
@@ -18,11 +20,13 @@ const taskSchema = new mongooose.Schema({
     type: String,
     default: 'Low',
     enum: ['Low', 'Medium', 'High'],
+    trim: true,
   },
   status: {
     type: String,
     default: 'Not Completed',
     enum: ['Completed', 'Not Completed'],
+    trim: true,
   },
   tags: [String],
   createdBy: {
