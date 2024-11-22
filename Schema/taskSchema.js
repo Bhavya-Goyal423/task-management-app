@@ -14,7 +14,7 @@ const taskSchema = new mongooose.Schema({
   },
   dueDate: {
     type: Date,
-    required: [true, 'A task must have a date'],
+    required: [true, 'A task must have a due date'],
   },
   priority: {
     type: String,
