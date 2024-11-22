@@ -9,6 +9,13 @@ mongooose.connect(process.env.DB_URI).then(() => {
   console.log('Connected to DB');
 });
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`App is listening....`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });
