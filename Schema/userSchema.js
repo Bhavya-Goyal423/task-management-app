@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const mongooose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongooose.Schema({
   name: {
@@ -29,6 +30,13 @@ const userSchema = new mongooose.Schema({
     },
   },
   tasks: [{ type: mongooose.Schema.Types.ObjectId, ref: 'Task' }],
+});
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
 });
 
 module.exports = mongooose.model('User', userSchema);
