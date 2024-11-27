@@ -7,7 +7,7 @@ const taskController = new TaskContoller();
 
 taskRouter
   .route('/')
-  .get(taskController.getTask)
+  .get(taskController.getTasks)
   .post(protect, taskController.createTask)
   .patch(taskController.updateTask)
   .delete(taskController.deleteTask);

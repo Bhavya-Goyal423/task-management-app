@@ -1,5 +1,6 @@
 const taskSchema = require('../Schema/taskSchema');
 const catchAsync = require('../utils/catchAsync');
+const userSchema = require('../Schema/userSchema');
 
 class TaskController {
   createTask = async (req, res, next) => {
@@ -16,6 +17,10 @@ class TaskController {
         createdBy: req.user._id,
       });
 
+      await userSchema.findByIdAndUpdate(req.user._id, {
+        $push: { tasks: task._id },
+      });
+
       return res.status(201).json({
         status: 'success',
         task,
@@ -25,7 +30,7 @@ class TaskController {
     }
   };
 
-  getTask = catchAsync(async (req, res, next) => {});
+  getTasks = catchAsync(async (req, res, next) => {});
   updateTask = catchAsync(async (req, res, next) => {});
   deleteTask = catchAsync(async (req, res, next) => {});
 }
