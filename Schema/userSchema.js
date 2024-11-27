@@ -32,6 +32,7 @@ const userSchema = new mongooose.Schema({
     select: false,
   },
   tasks: [{ type: mongooose.Schema.Types.ObjectId, ref: 'Task' }],
+  passwordChangedAt: Date,
 });
 
 userSchema.pre('save', async function (next) {
@@ -43,6 +44,17 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.correctPassword = async (password, hashPassword) => {
   return bcrypt.compare(password, hashPassword);
+};
+
+userSchema.methods.changePasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getime() / 1000,
+      10
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
 };
 
 module.exports = mongooose.model('User', userSchema);

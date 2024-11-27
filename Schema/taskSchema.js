@@ -7,7 +7,7 @@ const taskSchema = new mongooose.Schema({
     required: [true, 'A task must have a title'],
     trim: true,
   },
-  descrition: {
+  description: {
     type: String,
     required: [true, 'A task must have a description'],
     trim: true,
@@ -38,6 +38,7 @@ const taskSchema = new mongooose.Schema({
 
 taskSchema.pre('save', function (next) {
   if (this.isNew) this.status = 'Not Completed';
+  next();
 });
 
 module.exports = mongooose.model('Task', taskSchema);

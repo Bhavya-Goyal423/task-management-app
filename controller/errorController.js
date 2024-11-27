@@ -32,12 +32,21 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
+  // console.log('!!!!!!!!!!', err.name, '!!!!!!!!!');
+
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     if (err.name === 'ValidationError') {
       err = handleValidationError(err);
     }
+    if (err.name === 'JsonWebTokenError') {
+      err = new AppError('Invalid Token. Please log in again!', 404);
+    }
+    if (err.name === 'TokenExpireError') {
+      err = new AppError('Your token has expired! Please log in again.', 401);
+    }
+
     sendErrorProd(err, res);
   }
 };
